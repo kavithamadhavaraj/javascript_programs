@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+table td{
+	height:40px;
+	width:30px;
+	border:3px solid black;
+}
+</style>
+<script>
+var choice;
+var opened=[];
+var clicks=0;
+var close=false;   
+function openCard(value,id){
+	if(choice=='Limited Mode'){
+		if(clicks==20){
+			for(var i=0;i<10;i++)
+			{
+				document.getElementById(i+"b").disabled=true;
+			}
+			document.getElementById("results").innerHTML+="  !! Game Over !!";
+			return;
+		}
+	}
+	if(close)
+	{
+		if(!(document.getElementById(opened[0]).disabled)&&(!(document.getElementById(opened[1]).disabled))){
+		document.getElementById(opened[0]).innerHTML="XX";
+		document.getElementById(opened[1]).innerHTML="XX";
+		close=false;
+		}
+	}
+	if((clicks++%2)==1){
+		opened[1]=id;
+		close=true;
+		document.getElementById(id).innerHTML=value;
+		if(document.getElementById(opened[0]).innerHTML==document.getElementById(opened[1]).innerHTML)
+		{
+			document.getElementById(opened[0]).disabled=true;
+			document.getElementById(opened[1]).disabled=true;
+			document.getElementById(opened[0]).style.backgroundColor="green";
+			document.getElementById(opened[1]).style.backgroundColor="green";
+			document.getElementById("results").innerHTML-=10;
+			return;
+		}
+		document.getElementById("results").innerHTML-=1;
+	}
+	else{
+		opened[0]=id;
+		document.getElementById(id).innerHTML=value;
+		document.getElementById("results").innerHTML-=1;
+	}
+	}
+function loadPlayArea(){
+var chars=['#','$','@','%','#','&','@','$','%','&'];
+var position=[];
+var flag=true;
+var count=0;
+for(var i=0;i<10;i++){
+	flag=true;
+	var temp=Math.floor(Math.random()*10);
+	if(i==0) position[i]=temp;
+	else{
+		for(var j=0;j<i;j++){
+			if(temp==position[j]){flag=false; i--; break;}
+		}
+	}
+	if(flag) position[i]=temp;
+}
+var HTML="<table id='board'><tr>";
+for(var i=0;i<10;i++)
+{
+		HTML+="<td><button  style='width: 50px; height: 60px' onclick='openCard(this.value, this.id)' id='"+i+"b'></button></td>";
+}
+HTML+="</tr></table>";
+document.getElementById("boardArea").innerHTML=HTML;
+for(var i=0;i<10;i++)
+{
+	var temp=position[i];
+	document.getElementById(temp+"b").value=chars[count++];
+    document.getElementById(temp+"b").innerHTML	= "XX";
+}
+}
+function readChoice(){
+var temp=confirm("You are about to enter LIMITED MODE ! \n \nClick cancel to enter OPEN mode !");
+if(temp)
+	document.getElementById("data").innerHTML="Limited Mode";
+else
+	document.getElementById("data").innerHTML="Open Mode";
+choice=document.getElementById("data").innerHTML;
+loadPlayArea();
+}
+</script>
+</head>
+<body onload="readChoice()">
+<center>
+<h2>Memory Game</h2>
+You chose :<span id="data"></span><br/><br/><br/> Lesser the clicks .. Higher is your score!!<br/><br/><br/>
+<div id="boardArea"></div>
+<b>Your Points :<span id="results">100</span></b><br/><br/>
+</center>
+</body>
+</html>
