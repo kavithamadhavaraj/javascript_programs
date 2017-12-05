@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+table td{
+height:40px;
+width:30px;
+border:1px solid black;
+}
+</style>
+<script>
+var characters=['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z'];
+function guess(){
+var count=1,i=0;
+var data=document.getElementById("data").value;
+while(count<=9)
+{
+	var temp=characters[Math.floor(Math.random()*26)];
+	var exist=data.indexOf(temp);
+	if(exist>=0){
+		for(var k=0;k<data.length;k++)
+		{
+			if(data.charAt(k)==temp)
+			{
+				document.getElementById(k+"s").innerHTML=temp;
+				document.getElementById(k+"s").style.backgroundColor="yellow";
+			}
+		}
+	}
+	else{
+	document.getElementById("id"+count).innerHTML="<strike>"+document.getElementById("id"+count).innerHTML+"</strike>";
+	count++;
+	}
+}
+for(var k=0;k<data.length;k++)
+		{
+			if(!document.getElementById(k+"s").innerHTML)
+			{
+				document.getElementById(k+"s").innerHTML=data.charAt(k);
+				document.getElementById(k+"s").style.backgroundColor="red";
+			}
+		}
+}
+function loadPlayArea(){
+var data=document.getElementById("data").value;
+var HTML="<table id='result'><tr>";
+for(var i=0;i<data.length;i++)
+{
+	HTML+="<td id='"+i+"s' value='"+data.charAt(i)+"'></td>";
+}
+HTML+="</tr></table>";
+document.getElementById("guessArea").innerHTML=HTML;
+guess();
+}
+function readInput(){
+document.getElementById("data").value=prompt("Enter a movie name !!");
+if(document.getElementById("data").value)
+	loadPlayArea();
+else
+	readInput();
+}
+</script>
+</head>
+<body onload="readInput()">
+<center>
+<h2>Hollywood Game</h2>
+Your Input :<input type="text" id="data" disabled /><br/><br/><br/><br/>
+<div id="guessArea"></div>
+<b>
+<span id="id1">H</span>
+<span id="id2">O</span>
+<span id="id3">L</span>
+<span id="id4">L</span>
+<span id="id5">Y</span>
+<span id="id6">W</span>
+<span id="id7">O</span>
+<span id="id8">O</span>
+<span id="id9">D</span>
+</b><br/><br/>
+</center>
+</body>
+</html>
